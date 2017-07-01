@@ -1,5 +1,5 @@
 {
-  "name": "url-shortener",
+  "name": "url-shortner",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -7,5 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jitendersingh28/URL-Shortener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jitendersingh28/URL-Shortener/issues"
+  },
+  "homepage": "https://github.com/Jitendersingh28/URL-Shortener#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
 }
