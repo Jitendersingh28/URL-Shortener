@@ -1,57 +1,77 @@
-
-var express = require('express');
-var app = express();
-var path = require('path');
-
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var urlSchema = new Schema({
-  _id: {type: Number, index: true},
-  long_url: String,
-  short_url: String
+var express = require("express");
+var app     = express();
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
+var config = require("./config");
+var shortalgo = require("./shortalgo");
+var url = mongoose.connect('mongodb://localhost/urls', {
+  useMongoClient: true,
 });
 
-var Url = mongoose.model('Url', urlSchema);
 
-module.exports = Url;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({extended:true}));
+app.set("view engine","ejs");
 
-app.get('/', function(req, res){
-  
-  res.send(views/index.html);
+var urlSchema = new mongoose.Schema({
+  id:Number,
+  longurl: String
 });
 
-app.post('/api/shorten', function(req, res){
-  var longUrl = req.body.url;
-  var shortUrl = '';
+var url =mongoose.model("url",urlSchema);
+mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name,{
+  useMongoClient: true,
+  /* other options */
+});
 
-  Url.findOne({long_url: longUrl}, function (err, doc){
-    if (doc){
-    	tempfunctions();
-      shortUrl = config.webhost + id;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+//routes
+app.get("/",function(req,res){
+	res.render("home");
+});
 
-      res.send({'shortUrl': shortUrl});
+app.post("/shorturl",function(req,res){
+var longurl=req.body.longurl;
+var shorturl="";
+url.findOne({longurl:longurl},function(err,doc){
+	if(doc){
+		shorturl=config.webhost+(doc.id);
+		res.send({'shorturl':shorturl});
+	}
+	else{
+		var newUrl=url({
+			longurl:longurl
+		});
+		newUrl.save(function(err){
+			if(err){
+				console.log(err);
+			}
+			shorturl=config.webhost+(shortalgo.getRandomcode());
+			res.send({'shorturl':shorturl});
+		});
+	}
+});
+});
+
+app.get('/:encoded_id', function(req, res){
+
+  var id = shortalgo.getRandomcode(id);
+
+  // check if url already exists in database
+  Url.findOne({_id: id}, function (err, doc){
+    if (doc) {
+      res.redirect(doc.long_url);
     } else {
-      var newUrl = Url({
-        long_url: longUrl
-      });
-      newUrl.save(function(err) {
-        if (err){
-          console.log(err);
-        }
-         tempfunctions();
-        shortUrl = config.webhost + id;
-
-        res.send({'shortUrl': shortUrl});
-      });
+      res.redirect(config.webhost);
     }
-
   });
 
 });
 
-var server = app.listen(3000, function(){
+
+
+
+app.listen(3000, function(){
   console.log('Server listening on port 3000');
 });
