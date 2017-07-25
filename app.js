@@ -64,23 +64,7 @@ else{
 });
 });
 
-// app.get("/shorturl", function(req, res){
-// 	// var shorturl ={shorturl:shorturl};
-// 	// var shortu =JSON.parse(shorturl);
 
-// 	var id = shortalgo.decode(shorturl);
-
-// 	url.findOne({id:id},function(err,doc){
-// 		if(err){
-// 			res.redirect("home");
-// 		}
-// 		else{
-// 			res.render("result", { shorturl : JSON.stringify(shorturl) });
-
-// 		}
-// 	});
-
-// });
 app.get("/:shorturl",function(req,res){
 	var shorturl = req.params.shorturl
 	url.findOne({'shorturl':shorturl}, function(err, doc){
