@@ -39,8 +39,8 @@ var shorturl="";
 url.findOne({longurl:longurl},function(err,doc){
 if(!err){	
 	if(doc){
-		shorturl=config.webhost+(doc.id);
-		res.send({'shorturl':shorturl});
+		shorturl=config.webhost+(doc.shorturl);
+		res.render('result',{'shorturl':shorturl});
 	}
 	else{
 		 var ranID = shortalgo.getRandomCode()  
@@ -54,7 +54,7 @@ if(!err){
 				console.log(err);
 			}
 			shorturl=config.webhost+(newUrl.shorturl);
-			res.render({'shorturl':shorturl});
+			res.render("result",{'shorturl':shorturl});
 		});
 	}
 }
@@ -64,16 +64,33 @@ else{
 });
 });
 
-app.get("/shorturl", function(req, res){
-	url.findOne({longurl:longurl},function(err,doc){
-		if(err){
-			res.redirect("/");
-		}
-		else{
-			res.render("result.ejs", { shorturl : JSON.stringify(shorturl) });
-		}
-	})
+// app.get("/shorturl", function(req, res){
+// 	// var shorturl ={shorturl:shorturl};
+// 	// var shortu =JSON.parse(shorturl);
 
+// 	var id = shortalgo.decode(shorturl);
+
+// 	url.findOne({id:id},function(err,doc){
+// 		if(err){
+// 			res.redirect("home");
+// 		}
+// 		else{
+// 			res.render("result", { shorturl : JSON.stringify(shorturl) });
+
+// 		}
+// 	});
+
+// });
+app.get("/:shorturl",function(req,res){
+	var shorturl = req.params.shorturl
+	url.findOne({'shorturl':shorturl}, function(err, doc){
+       if(err){
+           res.render("home");
+       } else {
+       	   console.log(doc.longurl)
+           res.redirect('http://'+ doc.longurl);
+       }
+  })
 });
 
 app.listen(3000, function(){

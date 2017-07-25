@@ -1,1 +1,32 @@
-<html></html><script>var shorturl = <%- shorturl %></script><body></body></html>
+ <!DOCTYPE html>
+<html>
+<head>
+
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<style type="text/css">
+body
+{
+background-color:#ef7d26;
+}
+.container{
+    padding: 200px 80px 50px 80px;
+}
+</style>
+ 
+</head>
+<body class="container">
+    <div class="centered">
+       <div class ="container-fluid">
+	   <div class ="text-center">
+        <h1>Your Short Url</h1>
+        <p>Just copy the url and paste in your browser</p>
+        <h4 class ="mark">
+        <%= shorturl %>
+        </h4>
+       </div>
+     </div>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</body>
+</html>
